@@ -2,7 +2,7 @@
 //Fast abs() for 32 Bit-Integer
 
 static inline __attribute__((always_inline)) int32_t abs32(int32_t val);
-int32_t myAbs32(int32_t val)
+int32_t abs(int32_t val)
 {
   int32_t result = -val;
   if (result < 0)
