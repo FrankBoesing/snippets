@@ -48,3 +48,22 @@ int d;
     } while (*p != 0);
     return p - s;
 }
+
+
+// Teensy systick Restore old behaviour
+// https://forum.pjrc.com/threads/46442-Minimal-Blink-fails-with-void-yield()?p=153602&viewfull=1#post153602
+
+void mySystick_isr(void);
+
+void setup(){
+    _VectorsRam[15] = mySystick_isr;
+}
+
+[...]
+
+extern "C" volatile uint32_t systick_millis_count;
+void mySystick_isr(void)
+{
+    systick_millis_count++;    
+}
+
