@@ -67,3 +67,25 @@ void mySystick_isr(void)
     systick_millis_count++;    
 }
 
+//smallest software serial : (c) Frank Bösing
+#define DEBUG_BAUD (115200)
+
+void _serialDebugPrint(const uint8_t pin, const char * s) {
+  const unsigned long bit = F_CPU / DEBUG_BAUD;
+  ARM_DEMCR |= ARM_DEMCR_TRCENA;
+  ARM_DWT_CTRL |= ARM_DWT_CTRL_CYCCNTENA;
+  pinMode(pin, OUTPUT);
+  digitalWriteFast(pin, 1);
+  
+  while (*s) {
+   uint16_t c = (0x100 | *s++) << 1; //Add start & stop bits
+    noInterrupts(); //<-- not needed in NMI
+    unsigned long t = ARM_DWT_CYCCNT;    
+    for (int i = 1; i<11; i++) {
+      digitalWriteFast(pin, (c & 1) );
+      c = c >> 1;      
+      while ( ARM_DWT_CYCCNT - t < (i * bit) ) {;}
+    }
+    interrupts();//<-- not needed in NMI
+  }
+}
