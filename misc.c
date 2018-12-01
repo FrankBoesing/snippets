@@ -15,3 +15,17 @@ boolean summertime_EU(int year, byte month, byte day, byte hour, byte tzHours)
     return false;
 }
 
+
+//https://forum.arduino.cc/index.php?topic=481251.0
+
+__asm__ __volatile__(
+  ".macro NOPX      P1          \n\t"
+  ".rept &P1                    \n\t"
+  "NOP                          \n\t"
+  ".endr                        \n\t"   // End of Repeat
+  ".endm                        \n\t"   // End of macro
+);
+
+void setup() {
+  __asm__ __volatile__("NOPX 82");  
+}
