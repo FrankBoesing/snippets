@@ -29,3 +29,8 @@ __asm__ __volatile__(
 void setup() {
   __asm__ __volatile__("NOPX 82");  
 }
+
+//nanos()
+inline __attribute__((always_inline)) uint32_t nanos(void) {  
+  return (1000ull * ARM_DWT_CYCCNT) / (F_CPU / 1000000) ;
+}
