@@ -34,3 +34,27 @@ void setup() {
 inline __attribute__((always_inline)) uint32_t nanos(void) {  
   return (1000ull * ARM_DWT_CYCCNT) / (F_CPU / 1000000) ;
 }
+
+
+//LDREX/STREX detects interrupts
+#include "arm_math.h"
+#include "core_cmInstr.h"
+
+void setup() { delay(1000); }
+
+void loop() {
+static uint32_t a = 0;
+static uint32_t b = 0;
+uint32_t c,d, dummy;
+ do {
+  __LDREXW(&dummy);
+  c = a;
+  d = b;
+  if (c==10) {delay(2);a++;}//<- interrupt happens most likely here   
+ } while ( __STREXW(0, &dummy));
+ Serial.printf("c: %d, c:%d\n",c,d);
+ delay(500);
+ a++;b++;
+}
+
+
