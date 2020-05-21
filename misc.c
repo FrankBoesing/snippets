@@ -58,3 +58,26 @@ uint32_t c,d, dummy;
 }
 
 
+#ifdef PLL2SPREADSPECTRUM
+  CCM_ANALOG_PLL_SYS_SS = 0xfff0f000; //enable spread spectrum for PLL2
+#endif
+
+//Use PLL2 for Arm core
+#ifdef USE_T4_PLL2
+  unsigned v = 15;
+  set_arm_clock(528000000ULL * 18 / v);
+  CCM_ANALOG_PFD_528_CLR = (0x3f << 16);
+  CCM_ANALOG_PFD_528_SET = (v << 16);
+
+  CCM_CBCDR |= CCM_CBCDR_PERIPH_CLK_SEL;
+  __DSB();
+  while (CCM_CDHIPR & CCM_CDHIPR_PERIPH_CLK_SEL_BUSY) ; // wait
+
+  CCM_CBCMR &= ~(1 << 19); //ARM - Clock Source PLL2 - PFD0
+  __DSB();
+  CCM_CBCDR &= ~CCM_CBCDR_PERIPH_CLK_SEL;
+  __DSB();
+  while (CCM_CDHIPR & CCM_CDHIPR_PERIPH_CLK_SEL_BUSY) ; // wait
+
+  CCM_ANALOG_PLL_ARM &= ~(1 << 12); //Disable ARM-PLL
+#endif
