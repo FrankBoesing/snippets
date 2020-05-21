@@ -1,3 +1,7 @@
+//Get rid of useless and bad Arduino-defs:
+
+#undef round
+#undef abs
 
 
 //-------------------------------------------------------
