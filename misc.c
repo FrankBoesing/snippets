@@ -3,7 +3,37 @@
 #undef round
 #undef abs
 
+//-------------------------------------------------------
+//https://stackoverflow.com/questions/27303062/strstr-function-like-that-ignores-upper-or-lower-case
 
+char* stristr( const char* haystack, const char* needle )
+{
+  const char* p1 = haystack ;
+  const char* p2 = needle ;
+  const char* r = *p2 == 0 ? haystack : nullptr;
+
+  while ( *p1 != 0 && *p2 != 0 )
+  {
+    if ( tolower( (unsigned char)*p1 ) == tolower( (unsigned char)*p2 ) )
+    {
+      if ( r == nullptr ) r = p1;
+      p2++;
+    }
+    else
+    {
+      p2 = needle;
+      if ( r != nullptr ) p1 = r + 1;
+      if ( tolower( (unsigned char)*p1 ) == tolower( (unsigned char)*p2 ) )
+      {
+        r = p1;
+        p2++;
+      }
+      else r = nullptr;
+    }
+    p1++;
+  }
+  return *p2 == 0 ? (char*)r : nullptr;
+}
 //-------------------------------------------------------
 
 boolean summertime_EU(int year, byte month, byte day, byte hour, byte tzHours)
