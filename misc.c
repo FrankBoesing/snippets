@@ -39,6 +39,18 @@ bool isUTF8(String s)
 }
 
 //-------------------------------------------------------
+// trim in place
+
+void trim(char * s) {
+  unsigned char * p = (unsigned char*) s;
+  int l = strlen(s);
+
+  if (l == 0) return;
+  while (isspace(p[l - 1])) p[--l] = 0;
+  while (* p && isspace(* p)) ++p, --l;
+  memmove(s, p, l + 1);
+}
+//-------------------------------------------------------
 //https://stackoverflow.com/questions/27303062/strstr-function-like-that-ignores-upper-or-lower-case
 
 char* stristr( const char* haystack, const char* needle )
