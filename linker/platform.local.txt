@@ -1,0 +1,1 @@
+recipe.hooks.postbuild.4.pattern="{compiler.path}stdout_redirect" "{build.path}/{build.project_name}.symnm" "{compiler.path}{build.toolchain}{build.command.nm}" -n -S --defined-only -C "{build.path}/{build.project_name}.elf"
